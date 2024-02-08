@@ -1,0 +1,33 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "main": "src/main.ts",
+  "type": "module",
+  "scripts": {
+    "start:dev": "nodemon --exec node --loader ts-node/esm src/main.ts",
+    "start:prod": "tsc --build tsconfig.json && node dist/main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexanderFraltsov/crud-api.git"
+  },
+  "author": "Fraltsov Alexander",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlexanderFraltsov/crud-api/issues"
+  },
+  "homepage": "https://github.com/AlexanderFraltsov/crud-api#readme",
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.1"
+  }
+}
