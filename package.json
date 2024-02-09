@@ -6,10 +6,10 @@
     "node": ">=20.0.0"
   },
   "main": "src/main.ts",
-  "type": "module",
   "scripts": {
-    "start:dev": "nodemon --exec node --loader ts-node/esm src/main.ts",
-    "start:prod": "tsc --build tsconfig.json && node dist/main"
+		"build": "tsc --build tsconfig.json",
+    "start:dev": "npx nodemon src/main.ts",
+    "start:prod": "npm run build && node dist/main"
   },
   "repository": {
     "type": "git",
