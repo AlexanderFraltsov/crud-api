@@ -7,7 +7,7 @@
   },
   "main": "src/main.ts",
   "scripts": {
-		"build": "tsc --build tsconfig.json",
+    "build": "tsc --build tsconfig.json",
     "start:dev": "npx nodemon src/main.ts",
     "start:prod": "npm run build && node dist/main"
   },
@@ -23,11 +23,13 @@
   "homepage": "https://github.com/AlexanderFraltsov/crud-api#readme",
   "devDependencies": {
     "@types/node": "^20.11.16",
+    "@types/uuid": "^9.0.8",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "dotenv": "^16.4.1"
+    "dotenv": "^16.4.1",
+    "uuid": "^9.0.1"
   }
 }
