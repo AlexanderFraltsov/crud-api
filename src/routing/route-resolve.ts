@@ -4,14 +4,14 @@ import { TRequest, TResponse } from '../types';
 import { NonExistingEnpointError } from '../custom-errors';
 import { API_PREFIX, USER_REPOSITORY_PREFIX } from '../constants/constants';
 
-export const routeResolve = ({ method, host, pathname, body }: TRequest, response: TResponse) => {
+export const routeResolve = async ({ method, host, pathname, body }: TRequest, response: TResponse) => {
 	console.log(`${method}: ${host}${pathname}${body ? ' | body: ' + JSON.stringify(body) : ''}`);
 	try {
 		const pathSegments = pathname.split('/').filter(segment => Boolean(segment));
 		const [apiPrefix, repositoryPrefix, param] = pathSegments;
 
 		if (apiPrefix === API_PREFIX && repositoryPrefix === USER_REPOSITORY_PREFIX) {
-			return usersRouteResolve(response, method, param, body);
+			return await usersRouteResolve(response, method, param, body);
 		}
 
 		throw new NonExistingEnpointError();

@@ -9,7 +9,9 @@
   "scripts": {
     "build": "tsc --build tsconfig.json",
     "start:dev": "npx nodemon src/main.ts",
-    "start:prod": "npm run build && node dist/main"
+    "start:prod": "npm run build && node dist/main",
+		"start:multi": "npm run start:dev -- --MULTI=true",
+		"start:multi:prod": "npm run start:prod -- --MULTI=true"
   },
   "repository": {
     "type": "git",

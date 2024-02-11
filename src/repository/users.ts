@@ -7,8 +7,12 @@ import {
 } from './custom-errors';
 import { TUser, TUserCreateDto, TUserUpdateDto } from './types';
 
-class UserRepository {
+export class UsersRepository {
 	private users: TUser[] = [];
+
+	constructor(users: TUser[]) {
+		this.users = users;
+	}
 
 	public getUsers(): TUser[] {
 		return this.users;
@@ -67,5 +71,3 @@ class UserRepository {
 		}
 	}
 }
-
-export const usersRepository = new UserRepository();
