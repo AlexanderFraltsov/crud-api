@@ -35,6 +35,11 @@ or
 npm run start:multi:prod
 ```
 
+## Test
+```bash
+npm run test
+```
+
 ## Use:
 1. Implemented endpoint `api/users`:
     - **GET** `api/users` is used to get all persons

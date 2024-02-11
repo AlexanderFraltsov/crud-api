@@ -10,8 +10,9 @@
     "build": "tsc --build tsconfig.json",
     "start:dev": "npx nodemon src/main.ts",
     "start:prod": "npm run build && node dist/main",
-		"start:multi": "npm run start:dev -- --MULTI=true",
-		"start:multi:prod": "npm run start:prod -- --MULTI=true"
+    "start:multi": "npm run start:dev -- --MULTI=true",
+    "start:multi:prod": "npm run start:prod -- --MULTI=true",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,9 +25,13 @@
   },
   "homepage": "https://github.com/AlexanderFraltsov/crud-api#readme",
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.11.16",
+    "@types/supertest": "^6.0.2",
     "@types/uuid": "^9.0.8",
     "nodemon": "^3.0.3",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
