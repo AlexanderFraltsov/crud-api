@@ -1,16 +1,10 @@
-import { IncomingMessage, ServerResponse } from 'node:http';
-
 import { usersRepository } from '../repository/users';
 import { getErrorStatusCode } from '../utils';
-import { TRequest, TRequestBody } from '../types';
 import { NonExistingEnpointError } from '../custom-errors';
 import { EHttpMethod, EHttpStatusCode } from '../enums';
 import { TUserCreateDto, TUserUpdateDto } from '../repository/types';
+import { TRequest, TRequestBody, TResponse } from '../types';
 import { API_PREFIX, USER_REPOSITORY_PREFIX } from '../constants/constants';
-
-type TResponse = ServerResponse<IncomingMessage> & {
-	req: IncomingMessage;
-}
 
 export const routeResolve = ({ method, host, pathname, body }: TRequest, response: TResponse) => {
 	console.log(`${method}: ${host}${pathname}${body ? ' | body: ' + JSON.stringify(body) : ''}`);
