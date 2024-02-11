@@ -3,43 +3,48 @@ import 'dotenv/config';
 import cluster, { Worker } from 'node:cluster';
 import { availableParallelism } from 'node:os';
 
+import { TUser } from './repository/types';
 import { isMulti } from './utils';
 import { startServer } from './server/server';
-import { UsersRepository } from './repository/users';
-import { TUser } from './repository/types';
+import { EClusterMessage } from './enums';
+import { TClusterMessage } from './types';
+import { startLoadBalancer } from './load-balancer/load-balancer';
 
 const port = process.env.PORT ? Number.parseInt(process.env.PORT) : 3000;
 
 if (isMulti()) {
 	const numCPUs = availableParallelism();
 
-	let users: TUser[] = [];
 	if (cluster.isPrimary) {
-		let counter = 0;
-		const stateChangesHandler = (msg: { id: number, users: TUser[] }) => {
-			users = msg.users;
-			for (const id in cluster.workers) {
-				cluster.workers[id].send({ cmd: 'stateChanged', users });
-			}
-		};
-		const getStateHandler = (msg: { id: number }) => {
-			cluster.workers[msg.id].send({ cmd: 'sendState', users });
-		}
-
-		const messageHandler = (msg: any) => {
-			if (msg.cmd && msg.cmd === 'stateChanges') {
-				stateChangesHandler(msg);
-			}
-			if (msg.cmd && msg.cmd === 'getState') {
-				getStateHandler(msg);
-			}
-		};
+		let users: TUser[] = [];
 		let workers: Worker[] = [];
 		for (let i = 0; i < numCPUs; i++) {
 			workers.push(cluster.fork());
 		}
 
-		cluster.on('exit', (worker, code, signal) => {
+		const stateChangesHandler = (msg: TClusterMessage) => {
+			users = msg.users;
+			for (const id in cluster.workers) {
+				if (id !== msg.id.toString()) {
+					cluster.workers[id].send({ cmd: EClusterMessage.STATE_CHANGED, users });
+				}
+			}
+		};
+
+		const getStateHandler = (msg: TClusterMessage) => {
+			cluster.workers[msg.id].send({ cmd: EClusterMessage.SEND_STATE, users });
+		}
+
+		const messageHandler = (msg: TClusterMessage) => {
+			if (msg.cmd && msg.cmd === EClusterMessage.STATE_CHANGES) {
+				stateChangesHandler(msg);
+			}
+			if (msg.cmd && msg.cmd === EClusterMessage.GET_STATE) {
+				getStateHandler(msg);
+			}
+		};
+
+		cluster.on('exit', (worker) => {
 			console.log(`worker ${worker.process.pid} died`);
 			workers = workers.filter(({ id }) => id === worker.id);
 			workers.push(cluster.fork());
@@ -49,6 +54,8 @@ if (isMulti()) {
 			cluster.workers[id]
 				.on('message', messageHandler);
 		}
+
+		startLoadBalancer(port, numCPUs);
 	} else {
 		startServer(port + cluster.worker.id);
 	}
