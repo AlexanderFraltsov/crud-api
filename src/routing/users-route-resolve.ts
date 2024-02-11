@@ -1,29 +1,9 @@
 import { usersRepository } from '../repository/users';
-import { getErrorStatusCode } from '../utils';
-import { NonExistingEnpointError } from '../custom-errors';
+import { TRequestBody, TResponse } from '../types';
 import { EHttpMethod, EHttpStatusCode } from '../enums';
 import { TUserCreateDto, TUserUpdateDto } from '../repository/types';
-import { TRequest, TRequestBody, TResponse } from '../types';
-import { API_PREFIX, USER_REPOSITORY_PREFIX } from '../constants/constants';
 
-export const routeResolve = ({ method, host, pathname, body }: TRequest, response: TResponse) => {
-	console.log(`${method}: ${host}${pathname}${body ? ' | body: ' + JSON.stringify(body) : ''}`);
-	try {
-		const pathSegments = pathname.split('/').filter(segment => Boolean(segment));
-		const [apiPrefix, repositoryPrefix, param] = pathSegments;
-
-		if (apiPrefix === API_PREFIX && repositoryPrefix === USER_REPOSITORY_PREFIX) {
-			return usersRouteResolve(response, method, param, body);
-		}
-
-		throw new NonExistingEnpointError();
-	} catch (error) {
-  	response.statusCode = getErrorStatusCode(error);
-		response.end(error.message);
-	}
-}
-
-const usersRouteResolve = (response: TResponse, method: EHttpMethod, param: string | undefined, body?: TRequestBody) => {
+export const usersRouteResolve = (response: TResponse, method: EHttpMethod, param: string | undefined, body?: TRequestBody) => {
 	if (method === EHttpMethod.GET) {
 		if (!param) {
 			const users = usersRepository.getUsers();

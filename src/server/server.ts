@@ -1,11 +1,9 @@
 import { URL } from 'node:url';
 import { createServer } from 'node:http';
 
+import { parseBody } from '../utils';
 import { EHttpMethod } from '../enums';
-import { routeResolve } from './route-resolve';
-import { TRequestBody } from '../types';
-
-const parseBody = (data: Buffer[]): TRequestBody => JSON.parse(Buffer.concat(data).toString());
+import { routeResolve } from '../routing/route-resolve';
 
 const server = createServer((req, res) => {
   const { host, pathname }  = new URL(req.url, `http://${req.headers.host}/`);
@@ -23,7 +21,6 @@ const server = createServer((req, res) => {
 		res,
 	));
 });
-
 
 export const startServer = (port: number) =>
 	server.listen(port, () => {
