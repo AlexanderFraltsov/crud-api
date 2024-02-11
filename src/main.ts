@@ -17,7 +17,9 @@ if (isMulti()) {
 
 	if (cluster.isPrimary) {
 		let users: TUser[] = [];
+
 		let workers: Worker[] = [];
+
 		for (let i = 0; i < numCPUs; i++) {
 			workers.push(cluster.fork());
 		}
@@ -51,8 +53,7 @@ if (isMulti()) {
 		});
 
 		for (const id in cluster.workers) {
-			cluster.workers[id]
-				.on('message', messageHandler);
+			cluster.workers[id].on('message', messageHandler);
 		}
 
 		startLoadBalancer(port, numCPUs);
