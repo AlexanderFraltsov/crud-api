@@ -2,6 +2,8 @@
 
 ## Install
 
+- please, delete package-lock.json file and node_modules before install (I messed up a bit when setting up the project and did not update this file);
+
 - install dependencies:
 
 ```bash
